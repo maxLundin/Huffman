@@ -2,11 +2,11 @@
 // Created by max on 16.05.18.
 //
 
-#ifndef HAFFMAN_TREE_H
-#define HAFFMAN_TREE_H
+#pragma once
 
 #include <cstring>
 #include <fstream>
+#include <memory>
 #include <iostream>
 #include <algorithm>
 #include "bitSeq.h"
@@ -26,12 +26,12 @@ struct Node {
 };
 
 struct Node1 {
-    Node1 *left;
-    Node1 *right;
+    std::unique_ptr<Node1> left;
+    std::unique_ptr<Node1> right;
     Node1 *parent;
-    uint8_t letter;
+    char letter;
 
-    Node1(uint8_t let = (uint8_t) 'a') {
+    Node1(char let = 'a') {
         left = nullptr;
         right = nullptr;
         parent = nullptr;
@@ -42,42 +42,41 @@ struct Node1 {
 };
 
 struct Tree {
-    bool flagBuilded = false;
-    const char *fileName;
-    Node1 *root = nullptr;
+    bool flagBuilt = false;
+    const std::string fileName;
+    std::unique_ptr<Node1> root = nullptr;
     std::pair<size_t, Node> temp[513];
     size_t k;
-    bitSeq __array[256];
+    bitSeq my_array[256];
 
-private:
-    void doit(size_t node, bitSeq *prefix);
-
-    void printInfo(bool __order);
-
-    size_t fill();
-
-    void countFrequencies(size_t __iter);
-
-    void buildTree(bitSeq &bSeq, std::vector<uint8_t> &charVect);
 
 public:
 
     Tree();
 
-    void buildTree(bool __info, bool __order, char *outFile);
+    void buildTree(bool info, bool order, std::string outFile);
 
-    Tree(const char *string);
+    Tree(std::string string);
 
     void codePart(char *mas, size_t size, bitSeq *bitSeq1) const;
 
     void getSeqs(size_t node, bitSeq *outSeq, std::vector<uint8_t> *chars) const;
 
-    void buildTree(std::ifstream &in, const char *outputFile);
+    void buildTree(std::ifstream &in, const std::string outputFile);
 
     ~Tree();
 
-    void delTree(Node1 *node);
+private:
+    void doit(size_t node, bitSeq *prefix);
+
+    void printInfo(bool order);
+
+    size_t fill();
+
+    void countFrequencies(size_t my_iter);
+
+    void buildTree(bitSeq &bSeq, std::vector<uint8_t> &charVect);
+
 };
 
 
-#endif //HAFFMAN_TREE_H

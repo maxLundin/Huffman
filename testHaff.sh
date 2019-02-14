@@ -65,13 +65,13 @@ echo "==========Testing==========="
 time=$(date +%s%N | cut -b1-13)
 
 test a
-test war-and-peace
+#test war-and-peace
 test orwell
 test empty
 test abrakadabra
 test aaaaaa
 test ababab
-test Haffman1
+#test Haffman1
 #test Wavebox_3_10_0_linux_x86_64
 
 test1 aaaaaa

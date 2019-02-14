@@ -1,27 +1,17 @@
-#include "lib/ReadWriter.h"
+#include "ReadWriter.h"
+#include "haffman.h"
 
 int main(int argc, char *argv[]) {
     try {
-        if (argc != 6) {
+        if (argc <= 4) {
             throw std::runtime_error("Bad arguments format");
         }
         std::cout << "Output file is: " << argv[1] << std::endl;
+        Haffman haff{argv[3], argv[1]};
         if (strcmp(argv[2], "code") == 0) {
-            Tree tree = Tree(argv[3]);
-            if (strcmp(argv[4], "false") != 0) {
-                tree.buildTree(true, strcmp(argv[5], "false") != 0, argv[1]);
-            } else {
-                tree.buildTree(false, false, argv[1]);
-            }
-            ReadWriter::write(argv[3], argv[1], tree);
-            std::cout << "Compressing is done" << std::endl;
+            haff.code(argc >= 5 && strcmp(argv[4], "false") != 0, argc >= 6 && strcmp(argv[5], "false") != 0);
         } else if (strcmp(argv[2], "decode") == 0) {
-            Tree tree = Tree();
-            std::ifstream in(argv[3], std::ios::binary);
-            tree.buildTree(in, argv[1]);
-            ReadWriter::read(in, tree, argv[1]);
-            in.close();
-            std::cout << "Decompressing is done" << std::endl;
+            haff.decode();
         } else {
             std::cout << "Wrong code/decode arguments" << std::endl;
         }

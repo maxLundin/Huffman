@@ -36,7 +36,7 @@ void ReadWriter::compressor(char *input, size_t charNumber, bitSeq &ans, Tree co
     tree.codePart(input, charNumber, &ans);
 }
 
-void ReadWriter::write(const char *inputFileName, const char *outFileName, const Tree &tree) {
+void ReadWriter::write(const std::string inputFileName, const std::string outFileName, const Tree &tree) {
     std::ifstream in(inputFileName, std::ios::binary);
     std::ofstream out(outFileName, std::ios::binary);
 
@@ -65,15 +65,15 @@ void ReadWriter::write(const char *inputFileName, const char *outFileName, const
     out.close();
 }
 
-size_t ReadWriter::decompressor(bitSeq &bitSeq, uint8_t *out, Node1 *root) {
+size_t ReadWriter::decompressor(bitSeq &bitSeq, char *out, Node1 *root) {
     Node1 *node = root;
     size_t last = 0;
     for (size_t i = 0; i < bitSeq.size(); i++) {
         bool bit = ((bitSeq.data()[i >> 6] & (1ull << (i & 63))) != 0);
         if (!bit) {
-            node = node->right;
+            node = node->right.get();
         } else {
-            node = node->left;
+            node = node->left.get();
         }
         if (node->left == nullptr && node->right == nullptr) {
             out[last] = (node->letter);
@@ -84,7 +84,7 @@ size_t ReadWriter::decompressor(bitSeq &bitSeq, uint8_t *out, Node1 *root) {
     return last;
 }
 
-void ReadWriter::read(std::ifstream &in, const Tree &tree, const char *fileName) {
+void ReadWriter::read(std::ifstream &in, const Tree &tree, const std::string fileName) {
     std::ofstream out(fileName, std::ios::binary);
     uint32_t dataSize = 0;
     while (true) {
@@ -97,8 +97,8 @@ void ReadWriter::read(std::ifstream &in, const Tree &tree, const char *fileName)
             throw std::runtime_error("Wrong file format");
         }
         bitSeq bitSeq1(data, (size_t) (dataSize));
-        uint8_t out1[128000];
-        size_t last = decompressor(bitSeq1, out1, tree.root);
+        char out1[128000];
+        size_t last = decompressor(bitSeq1, out1, tree.root.get());
         out.write((char *) out1, last);
     }
     out.close();

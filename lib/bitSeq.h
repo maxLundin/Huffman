@@ -32,6 +32,7 @@ public:
     void out() const;
 
     ~bitSeq();
+
 };
 
 

@@ -12,17 +12,17 @@
 class ReadWriter {
 
 public:
-    static void write(const char *inputFileName, const char *outFileName, const Tree &tree);
+    static void compressor(char *, size_t, bitSeq &ans, Tree const &tree);
 
-    static void read(std::ifstream &in, const Tree &tree, const char *fileName);
+    static size_t decompressor(bitSeq &bitSeq, char *out, Node1 *root);
+
+    static void write(const std::string inputFileName, const std::string outFileName, const Tree &tree);
+
+    static void read(std::ifstream &in, const Tree &tree, const std::string fileName);
 
     static void writeBitSeq(std::ofstream &out, bitSeq &bs);
 
     static void writeTree(std::ofstream &out, const Tree &tree);
-
-    static void compressor(char *, size_t, bitSeq &ans, Tree const &tree);
-
-    static size_t decompressor(bitSeq &bitSeq, uint8_t *out, Node1 *root);
 };
 
 

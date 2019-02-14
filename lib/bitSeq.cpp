@@ -34,8 +34,7 @@ void bitSeq::delBit() {
 
 bitSeq::bitSeq() {
     leng = 0;
-    bits = {};
-    bits.push_back(0);
+    bits = {0};
 }
 
 std::vector<uint64_t> &bitSeq::data() {
