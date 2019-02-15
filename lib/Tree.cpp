@@ -19,15 +19,15 @@ bool compRev(std::pair<size_t, Node> &a, std::pair<size_t, Node> &b) {
     return (a.first < b.first);
 }
 
-void Tree::doit(size_t node, bitSeq *prefix) {
+void Tree::decode_tree(size_t node, bitSeq *prefix) {
     if (temp[node].second.left == -1 && temp[node].second.right == -1) {
         my_array[(temp[node].second.letter)] = (*prefix);
     } else {
         prefix->addBit(true);
-        doit((size_t) temp[node].second.left, prefix);
+        decode_tree((size_t) temp[node].second.left, prefix);
         prefix->delBit();
         prefix->addBit(false);
-        doit((size_t) temp[node].second.right, prefix);
+        decode_tree((size_t) temp[node].second.right, prefix);
         prefix->delBit();
     }
 }
@@ -105,10 +105,10 @@ void Tree::countFrequencies(size_t my_iter) {
 void Tree::buildTree(bool info, bool order, std::string outFile) {
     flagBuilt = true;
     std::ifstream in(fileName, std::ios::binary);
-    std::vector<uint8_t> c(128000);
+    std::vector<char> c(128000);
 
     for (int i = 0; i < 256; i++) {
-        temp[i].second = Node((uint8_t) i);
+        temp[i].second = Node(i);
         temp[i].first = 0;
     }
 
@@ -161,7 +161,7 @@ void Tree::buildTree(bool info, bool order, std::string outFile) {
 
     bitSeq bs = bitSeq();
     if (k != 0) {
-        doit(k + 255, &bs);
+        decode_tree(k + 255, &bs);
     } else {
         bs.addBit(true);
         my_array[(temp[255].second.letter)] = bs;
@@ -172,27 +172,27 @@ void Tree::buildTree(bool info, bool order, std::string outFile) {
 void Tree::codePart(char *mas, size_t size, bitSeq *bitSeq1) const {
     if (flagBuilt) {
         for (size_t i = 0; i < size; i++) {
-            (*bitSeq1).append(my_array[(uint8_t) mas[i]]);
+            bitSeq1->append(my_array[(uint8_t) mas[i]]);
         }
     } else {
         throw std::runtime_error("Tree is not builded");
     }
 }
 
-void Tree::getSeqs(size_t node, bitSeq *outSeq, std::vector<uint8_t> *chars) const {
+void Tree::getSeqs(size_t node, bitSeq *outSeq, std::vector<char> *chars) const {
     if (flagBuilt) {
         if (temp[node].second.left != -1 || temp[node].second.right != -1) {
-            (*outSeq).addBit(true);
+            outSeq->addBit(true);
             getSeqs((size_t) (temp[node].second.left), outSeq, chars);
-            (*outSeq).addBit(false);
+            outSeq->addBit(false);
             getSeqs((size_t) (temp[node].second.right), outSeq, chars);
         } else {
-            (*chars).push_back(temp[node].second.letter);
+            chars->push_back(temp[node].second.letter);
         }
     }
 }
 
-void Tree::buildTree(bitSeq &bSeq, std::vector<uint8_t> &charVect) {
+void Tree::buildTree(bitSeq &bSeq, std::vector<char> &charVect) {
     flagBuilt = true;
     Node1 *node = root.get();
     size_t charNumber = 0;
@@ -255,10 +255,10 @@ void Tree::buildTree(std::ifstream &in, const std::string outputFile) {
     /*reading chars*/
     uint32_t temp = 0;
     in.read((char *) &temp, sizeof(uint32_t));
-    std::vector<uint8_t> temp_char_vector;
+    std::vector<char> temp_char_vector;
     uint8_t data1 = 0;
     while ((temp) != 0) {
-        if (in.read((char *) &data1, sizeof(uint8_t)).gcount() == 0) {
+        if (in.read((char *) &data1, sizeof(char)).gcount() == 0) {
             throw std::runtime_error("Bad file format");
         }
         temp_char_vector.push_back(data1);

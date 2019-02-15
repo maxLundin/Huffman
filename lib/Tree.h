@@ -14,9 +14,9 @@
 struct Node {
     int64_t left;
     int64_t right;
-    uint8_t letter;
+    char letter;
 
-    Node(uint8_t let = (uint8_t) 'a') {
+    Node(char let = 'a') {
         left = -1;
         right = -1;
         letter = let;
@@ -60,14 +60,14 @@ public:
 
     void codePart(char *mas, size_t size, bitSeq *bitSeq1) const;
 
-    void getSeqs(size_t node, bitSeq *outSeq, std::vector<uint8_t> *chars) const;
+    void getSeqs(size_t node, bitSeq *outSeq, std::vector<char> *chars) const;
 
     void buildTree(std::ifstream &in, const std::string outputFile);
 
     ~Tree();
 
 private:
-    void doit(size_t node, bitSeq *prefix);
+    void decode_tree(size_t node, bitSeq *prefix);
 
     void printInfo(bool order);
 
@@ -75,7 +75,7 @@ private:
 
     void countFrequencies(size_t my_iter);
 
-    void buildTree(bitSeq &bSeq, std::vector<uint8_t> &charVect);
+    void buildTree(bitSeq &bSeq, std::vector<char> &charVect);
 
 };
 

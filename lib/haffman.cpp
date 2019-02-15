@@ -17,7 +17,7 @@ void Haffman::code(bool f1, bool f2) {
 void Haffman::decode(bool f1, bool f2) {
     Tree tree{};
     std::ifstream in_stream(input, std::ios::binary);
-    tree.buildTree(in_stream, input);
+    tree.buildTree(in_stream, output);
     ReadWriter::read(in_stream, tree, output);
     in_stream.close();
     std::cout << "Decompressing is done" << std::endl;

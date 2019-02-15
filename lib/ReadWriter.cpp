@@ -19,7 +19,7 @@ void ReadWriter::writeBitSeq(std::ofstream &out, bitSeq &bs) {
 
 void ReadWriter::writeTree(std::ofstream &out, const Tree &tree) {
     bitSeq bs1 = bitSeq();
-    std::vector<uint8_t> chars;
+    std::vector<char> chars;
     if (tree.k != 0) {
         tree.getSeqs(tree.k + 255, &bs1, &chars);
     } else {
@@ -48,13 +48,13 @@ void ReadWriter::write(const std::string inputFileName, const std::string outFil
 
     writeTree(out, tree);
 
-    uint8_t buffer[128000];
+    char buffer[128000];
 
     size_t charNumber = 0;
     std::cout << "Starting writing to the file" << std::endl;
     while (!in.eof()) {
-        std::memset(buffer, 0, 128000 * sizeof(uint8_t));
-        in.read((char *) buffer, 128000 * sizeof(uint8_t));
+        std::memset(buffer, 0, 128000 * sizeof(char));
+        in.read((char *) buffer, 128000 * sizeof(char));
         charNumber += in.gcount();
         bitSeq bs;
         compressor((char *) &buffer, in.gcount(), bs, tree);
